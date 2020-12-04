@@ -28,23 +28,22 @@ use stdClass;
 /**
  * Class Model
  *
- * The BaseModel class provides a number of convenient features that
- * makes working with a databases less painful. Extending this class
- * provide means of implementing various database systems
+ * The BaseModel class provides a number of features that makes
+ * working with databases more convenient. The properties and
+ * methods in this class are those common to all supported
+ * database systems.
  *
- * It will:
+ * Overview:
  *      - simplifies pagination
- *      - allow specifying the return type (array, object, etc) with each call
- *      - automatically set and update timestamps
- *      - handle soft deletes
- *      - ensure validation is run against objects when saving items
- *      - process various callbacks
- *      - allow intermingling calls to the db connection
+ *      - allows specifying the return type (array, object, etc) with each call
+ *      - automatically sets and updates timestamps
+ *      - handles soft deletes
+ *      - ensures validation against objects when saving items
+ *      - processes internal event callbacks
+ *      - intermingles calls with the underlying connection
  */
 abstract class BaseModel
 {
-	// region Properties
-
 	/**
 	 * Pager instance.
 	 * Populated after calling $this->paginate()
@@ -287,10 +286,6 @@ abstract class BaseModel
 	 */
 	protected $afterDelete = [];
 
-	// endregion
-
-	// region Constructor
-
 	/**
 	 * BaseModel constructor.
 	 *
@@ -303,10 +298,6 @@ abstract class BaseModel
 		$this->tempAllowCallbacks = $this->allowCallbacks;
 		$this->validation         = $validation ?? Services::validation(null, false);
 	}
-
-	// endregion
-
-	// region Abstract Methods
 
 	/**
 	 * Fetches the row of database
@@ -484,10 +475,6 @@ abstract class BaseModel
 	 */
 	abstract public function chunk(int $size, Closure $userFunc);
 
-	// endregion
-
-	// region CRUD & Finders
-
 	/**
 	 * Fetches the row of database
 	 *
@@ -549,7 +536,7 @@ abstract class BaseModel
 			throw DataException::forFindColumnHaveMultipleColumns();
 		}
 
-		$resultSet = $resultSet = $this->doFindColumn($columnName);
+		$resultSet = $this->doFindColumn($columnName);
 
 		return $resultSet ? array_column($resultSet, $columnName) : null;
 	}
@@ -1148,10 +1135,6 @@ abstract class BaseModel
 		return $error['message'] ?? null;
 	}
 
-	// endregion
-
-	// region Pager
-
 	/**
 	 * Works with Pager to get the size and offset parameters.
 	 * Expects a GET variable (?page=2) that specifies the page of results
@@ -1181,10 +1164,6 @@ abstract class BaseModel
 
 		return $this->findAll($perPage, $offset);
 	}
-
-	// endregion
-
-	// region Allowed Fields
 
 	/**
 	 * It could be used when you have to change default or override current allowed fields.
@@ -1250,10 +1229,6 @@ abstract class BaseModel
 
 		return $data;
 	}
-
-	// endregion
-
-	// region Timestamps
 
 	/**
 	 * Sets the date or current date if null value is passed
@@ -1328,10 +1303,6 @@ abstract class BaseModel
 				return (string) $value;
 		}
 	}
-
-	// endregion
-
-	// region Validation
 
 	/**
 	 * Set the value of the skipValidation flag.
@@ -1530,10 +1501,6 @@ abstract class BaseModel
 		return $rules;
 	}
 
-	// endregion
-
-	// region Callbacks
-
 	/**
 	 * Sets $tempAllowCallbacks value so that we can temporarily override
 	 * the setting. Resets after the next method that uses triggers.
@@ -1591,10 +1558,6 @@ abstract class BaseModel
 
 		return $eventData;
 	}
-
-	// endregion
-
-	// region Utility
 
 	/**
 	 * Sets the return type of the results to be as an associative array.
@@ -1703,10 +1666,6 @@ abstract class BaseModel
 		return $properties;
 	}
 
-	// endregion
-
-	// region Magic
-
 	/**
 	 * Provides the db connection and model's properties.
 	 *
@@ -1771,10 +1730,6 @@ abstract class BaseModel
 		return $result;
 	}
 
-	// endregion
-
-	// region Deprecated
-
 	/**
 	 * Replace any placeholders within the rules with the values that
 	 * match the 'key' of any properties being set. For example, if
@@ -1835,6 +1790,4 @@ abstract class BaseModel
 
 		return $rules;
 	}
-
-	// endregion
 }

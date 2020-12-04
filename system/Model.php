@@ -45,8 +45,6 @@ use ReflectionProperty;
  */
 class Model extends BaseModel
 {
-	// region Properties
-
 	/**
 	 * Name of database table
 	 *
@@ -69,6 +67,13 @@ class Model extends BaseModel
 	protected $useAutoIncrement = true;
 
 	/**
+	 * Database Connection
+	 *
+	 * @var ConnectionInterface
+	 */
+	protected $db;
+
+	/**
 	 * Query Builder object
 	 *
 	 * @var BaseBuilder|null
@@ -83,10 +88,6 @@ class Model extends BaseModel
 	 * @var array
 	 */
 	protected $tempData = [];
-
-	// endregion
-
-	// region Constructor
 
 	/**
 	 * Model constructor.
@@ -108,10 +109,6 @@ class Model extends BaseModel
 		}
 	}
 
-	// endregion
-
-	// region Setters
-
 	/**
 	 * Specify the table associated with a model
 	 *
@@ -125,10 +122,6 @@ class Model extends BaseModel
 
 		return $this;
 	}
-
-	// endregion
-
-	// region Database Methods
 
 	/**
 	 * Fetches the row of database from $this->table with a primary key
@@ -550,10 +543,6 @@ class Model extends BaseModel
 		return $this->builder()->testMode($test)->countAllResults($reset);
 	}
 
-	// endregion
-
-	// region Builder
-
 	/**
 	 * Provides a shared instance of the Query Builder.
 	 *
@@ -623,12 +612,6 @@ class Model extends BaseModel
 		return $this;
 	}
 
-	// endregion
-
-	// region Overrides
-
-	// region CRUD & Finders
-
 	/**
 	 * This method is called on save to determine if entry have to be updated
 	 * If this method return false insert operation will be executed
@@ -696,10 +679,6 @@ class Model extends BaseModel
 		return parent::update($id, $data, $escape);
 	}
 
-	// endregion
-
-	// region Utility
-
 	/**
 	 * Takes a class an returns an array of it's public and protected
 	 * properties as an array with raw values.
@@ -728,10 +707,6 @@ class Model extends BaseModel
 
 		return $properties;
 	}
-
-	// endregion
-
-	// region Magic
 
 	/**
 	 * Provides/instantiates the builder/db connection and model's table/primary key names and return type.
@@ -815,14 +790,8 @@ class Model extends BaseModel
 		return $result;
 	}
 
-	// endregion
-
-	// endregion
-
-	// region Deprecated
-
 	/**
-	 * Takes a class an returns an array of it's public and protected
+	 * Takes a class and returns an array of it's public and protected
 	 * properties as an array suitable for use in creates and updates.
 	 *
 	 * @param string|object $data        Data
@@ -896,7 +865,4 @@ class Model extends BaseModel
 
 		return $properties;
 	}
-
-	// endregion
-
 }
